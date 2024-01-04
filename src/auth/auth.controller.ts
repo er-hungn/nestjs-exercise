@@ -10,6 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { User } from 'src/user/entities/user.entity';
+import { LoginRequestDto } from './dto/login-request.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(ValidationPipe)
@@ -20,5 +21,10 @@ export class AuthController {
   @Post('register')
   register(@Body() registerDto: RegisterDto): Promise<User> {
     return this.authService.register(registerDto);
+  }
+
+  @Post('login')
+  login(@Body() loginRequestDto: LoginRequestDto) {
+    return this.authService.login(loginRequestDto);
   }
 }

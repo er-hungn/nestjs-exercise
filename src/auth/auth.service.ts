@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RegisterDto } from './dto/register.dto';
 import { User } from '../user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
@@ -30,5 +30,14 @@ export class AuthService {
     };
 
     return response;
+  }
+
+  async validateToken(token: string) {
+    try {
+      const payload = await this.jwtService.verifyAsync(token);
+      return payload;
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
   }
 }

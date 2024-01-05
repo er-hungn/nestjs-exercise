@@ -11,6 +11,7 @@ import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { User } from 'src/user/entities/user.entity';
 import { LoginRequestDto } from './dto/login-request.dto';
+import { TokenValidationDto } from './dto/token-validation.dto';
 
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(ValidationPipe)
@@ -26,5 +27,10 @@ export class AuthController {
   @Post('login')
   login(@Body() loginRequestDto: LoginRequestDto) {
     return this.authService.login(loginRequestDto);
+  }
+
+  @Post('token-validation')
+  tokenValidation(@Body() tokenValidationDto: TokenValidationDto) {
+    return this.authService.validateToken(tokenValidationDto.token);
   }
 }

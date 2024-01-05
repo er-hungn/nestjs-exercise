@@ -4,11 +4,21 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+import { LoggerService } from '../logger.service';
 
 @Injectable()
 export class ResponseLoggerInterceptor implements NestInterceptor {
+  constructor(private loggerService: LoggerService) {}
+
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    return next.handle();
+    const request = context.switchToHttp().getRequest();
+    const response = context.switchToHttp().getResponse();
+
+    return next
+      .handle()
+      .pipe(
+        tap((data) => this.loggerService.logResponse(request, response, data)),
+      );
   }
 }
